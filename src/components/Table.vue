@@ -19,63 +19,38 @@
             </v-tabs>
             <div class="amount">
               <p class="total-amount x">Total payable amount:</p>
-              <p class="digit x">$1200</p>
+              <p class="digit x">${{ totalAmount }}</p>
               <p class="sign x">USD</p>
             </div>
           </div>
           <v-divider class="divider"></v-divider>
 
           <br />
-          <v-tabs-items v-model="tab" class="tab-items">
-            <div class="table-header-container">
-              <div class="left-container">
-                <div class="filter">
-                  <div class="text-center">
-                    <v-menu
-                      v-model="menu"
-                      :close-on-content-click="false"
-                      offset-y
-                      style="max-width: 224px"
-                    >
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn v-bind="attrs" v-on="on" class="filter-button">
-                          <v-icon medium class="filter-icon">
-                            mdi-filter
-                          </v-icon>
-                          <span class="filter-text">Filter</span>
-                        </v-btn>
-                      </template>
 
-                      <v-card class="menu">
-                        <v-list>
-                          <p class="sort">SORT BY:</p>
-                          <v-list-item v-for="sort in sorts" :key="sort">
-                            <v-list-item-content>
-                              <v-list-item-subtitle>{{
-                                sort
-                              }}</v-list-item-subtitle>
-                            </v-list-item-content>
+          <div class="table-header-container">
+            <div class="left-container">
+              <div class="filter">
+                <div class="text-center">
+                  <v-menu
+                    v-model="menu"
+                    :close-on-content-click="false"
+                    offset-y
+                    style="max-width: 224px"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn v-bind="attrs" v-on="on" class="filter-button">
+                        <v-icon medium class="filter-icon"> mdi-filter </v-icon>
+                        <span class="filter-text">Filter</span>
+                      </v-btn>
+                    </template>
 
-                            <v-list-item-action>
-                              <v-radio-group>
-                                <v-radio
-                                  v-for="n in 1"
-                                  :key="n"
-                                  :value="n"
-                                  v-model="radioGroup"
-                                ></v-radio>
-                              </v-radio-group>
-                            </v-list-item-action>
-                          </v-list-item>
-                        </v-list>
-                      </v-card>
-
+                    <v-card class="menu">
                       <v-list>
-                        <p class="sort">Users:</p>
-                        <v-list-item v-for="user in users" :key="user">
+                        <p class="sort">SORT BY:</p>
+                        <v-list-item v-for="sort in sorts" :key="sort">
                           <v-list-item-content>
                             <v-list-item-subtitle>{{
-                              user
+                              sort
                             }}</v-list-item-subtitle>
                           </v-list-item-content>
 
@@ -91,101 +66,117 @@
                           </v-list-item-action>
                         </v-list-item>
                       </v-list>
-                    </v-menu>
-                  </div>
-                </div>
-                <div class="search">
-                  <form class="nosubmit">
-                    <input
-                      class="nosubmit"
-                      type="search"
-                      v-model="search"
-                      placeholder="Search Users by Name, Email or Date..."
-                    />
-                  </form>
+                    </v-card>
+
+                    <v-list>
+                      <p class="sort">Users:</p>
+                      <v-list-item v-for="user in users" :key="user">
+                        <v-list-item-content>
+                          <v-list-item-subtitle>{{
+                            user
+                          }}</v-list-item-subtitle>
+                        </v-list-item-content>
+
+                        <v-list-item-action>
+                          <v-radio-group>
+                            <v-radio
+                              v-for="n in 1"
+                              :key="n"
+                              :value="n"
+                              v-model="radioGroup"
+                            ></v-radio>
+                          </v-radio-group>
+                        </v-list-item-action>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
                 </div>
               </div>
-              <div class="right-container">
-                <v-btn class="pay-button" color="indigo"> PAY DUES </v-btn>
+              <div class="search">
+                <form class="nosubmit">
+                  <input
+                    class="nosubmit"
+                    type="search"
+                    v-model="search"
+                    placeholder="Search Users by Name, Email or Date..."
+                  />
+                </form>
               </div>
             </div>
-            <v-tab-item>
-              <br />
-              <v-data-table
-                v-model="selected"
-                :headers="headers"
-                :items="desserts"
-                :single-select="singleSelect"
-                item-key="name"
-                show-select
-                class="elevation-1"
-                :single-expand="singleExpand"
-                :expanded.sync="expanded"
-                show-expand
+            <div class="right-container">
+              <v-btn class="pay-button" color="indigo"> PAY DUES </v-btn>
+            </div>
+          </div>
+
+          <br />
+          <v-data-table
+            v-model="selected"
+            :headers="headers"
+            :items="desserts"
+            :single-select="singleSelect"
+            item-key="name"
+            show-select
+            class="elevation-1"
+            :single-expand="singleExpand"
+            :expanded.sync="expanded"
+            show-expand
+          >
+            <template v-slot:[`item.firstName`]="{ item }">
+              <a small class="item-name"> {{ item.firstName }}</a
+              ><br /><br />
+              <p class="item-email">{{ item.email }}</p>
+            </template>
+            <template v-slot:[`header.icon`]="{ header }">
+              <v-icon small class="more-info"> mdi-dots-vertical</v-icon
+              >{{ header.text }}
+            </template>
+            <template v-slot:[`expanded-item`]="{ headers, item }">
+              <td :colspan="headers.length">
+                More info about {{ item.firstName }}
+              </td>
+            </template>
+
+            <template v-slot:[`item.userStatus`]="{ item }">
+              <v-icon class="item-user-status-icon icon"
+                >mdi-circle-small</v-icon
               >
-                <template v-slot:[`item.firstName`]="{ item }">
-                  <a small class="item-name"> {{ item.firstName }}</a
-                  ><br /><br />
-                  <p class="item-email">{{ item.email }}</p>
-                </template>
-                <template v-slot:[`header.icon`]="{ header }">
-                  <v-icon small class="more-info"> mdi-dots-vertical</v-icon
-                  >{{ header.text }}
-                </template>
-                <template v-slot:[`expanded-item`]="{ headers, item }">
-                  <td :colspan="headers.length">
-                    More info about {{ item.firstName }}
-                  </td>
-                </template>
+              <v-chip
+                small
+                class="item-user-status"
+                outlined
+                :color="getColor(item.userStatus)"
+              >
+                {{ item.userStatus }} </v-chip
+              ><br />
+              <p class="item-date">Last Login: {{ item.lastLogin }}</p>
+            </template>
+            <template v-slot:[`item.paymentStatus`]="{ item }">
+              <v-icon class="icon">mdi-circle-small</v-icon>
+              <v-chip
+                small
+                class="ma-2 item-payment-status"
+                outlined
+                :color="color(item.paymentStatus)"
+              >
+                {{ item.paymentStatus }} </v-chip
+              ><br />
+              <p class="item-payment-date">Dues On: {{ item.paidOn }}</p>
+            </template>
+            <template v-slot:[`item.amount`]="{ item }">
+              <a small class="item-amount"> $ {{ item.amountInCents }} </a
+              ><br /><br />
+              <p class="item-usd">USD</p>
+            </template>
+            <template v-slot:[`item.actions`]="{ item }">
+              <a small class="view-more" @click="editItem(item)"> View More </a>
+            </template>
 
-                <template v-slot:[`item.userStatus`]="{ item }">
-                  <v-chip
-                    small
-                    class="item-user-status"
-                    outlined
-                    :color="getColor(item.userStatus)"
-                  >
-                    <v-icon class="item-user-status-icon user-icon"
-                      >mdi-circle-small</v-icon
-                    >
-                    {{ item.userStatus }} </v-chip
-                  ><br />
-                  <p class="item-date">Last Login: {{ item.lastLogin }}</p>
-                </template>
-                <template v-slot:[`item.paymentStatus`]="{ item }">
-                  <v-chip
-                    small
-                    class="ma-2 item-payment-status"
-                    outlined
-                    :color="color(item.paymentStatus)"
-                  >
-                    <v-icon :color="color(item.paymentStatus)" class="icon"
-                      >mdi-circle-small</v-icon
-                    >
-                    {{ item.paymentStatus }} </v-chip
-                  ><br />
-                  <p class="item-payment-date">Dues On: {{ item.paidOn }}</p>
-                </template>
-                <template v-slot:[`item.amount`]="{ item }">
-                  <a small class="item-amount"> $ {{ item.amountInCents }} </a
-                  ><br /><br />
-                  <p class="item-usd">USD</p>
-                </template>
-                <template v-slot:[`item.actions`]="{ item }">
-                  <a small class="view-more" @click="editItem(item)">
-                    View More
-                  </a>
-                </template>
-
-                <template v-slot:[`item.icon`]="{ item }">
-                  <v-icon small class="mr-2" @click="editItem(item)">
-                    mdi-dots-vertical
-                  </v-icon>
-                </template>
-              </v-data-table></v-tab-item
-            >
-            <v-tab-item> 2 </v-tab-item>
-          </v-tabs-items>
+            <template v-slot:[`item.icon`]="{ item }">
+              <v-icon small class="mr-2" @click="editItem(item)">
+                mdi-dots-vertical
+              </v-icon>
+            </template>
+          </v-data-table>
         </v-container>
       </div>
     </div>
@@ -233,108 +224,7 @@ export default {
       ],
 
       desserts: [],
-      //   desserts: [
-      //     {
-      //       name: "Frozen Yogurt",
-      //       email: "example@yahoo.com",
-      //       user_status: "active",
-      //       payment_status: "paid",
-      //       date: "12/10/2022",
-      //       payment_date: "13/09/2020",
-
-      //       amount: 24,
-      //     },
-      //     {
-      //       name: "Ice cream sandwich",
-      //       email: "example@yahoo.com",
-      //       user_status: "Inactive",
-      //       payment_status: "Overdue",
-      //       date: "12/10/2021",
-      //       payment_date: "13/09/2020",
-
-      //       amount: 24,
-      //     },
-      //     {
-      //       name: "Eclair",
-      //       email: "example@yahoo.com",
-      //       user_status: "active",
-      //       payment_status: "Unpaid",
-      //       date: "12/10/2020",
-      //       payment_date: "13/09/2020",
-
-      //       amount: 24,
-      //     },
-      //     {
-      //       name: "Cupcake",
-      //       email: "example@yahoo.com",
-      //       user_status: "Inactive",
-      //       payment_status: "Overdue",
-      //       date: "12/10/2022",
-      //       payment_date: "13/09/2020",
-
-      //       amount: 25,
-      //     },
-      //     {
-      //       name: "Gingerbread",
-      //       email: "example@yahoo.com",
-      //       user_status: "active",
-      //       payment_status: "Unpaid",
-      //       date: "12/10/2021",
-      //       payment_date: "13/09/2020",
-
-      //       amount: 24,
-      //     },
-      //     {
-      //       name: "Jelly bean",
-      //       email: "example@yahoo.com",
-      //       user_status: "Inactive",
-      //       payment_status: "paid",
-      //       date: "12/10/2022",
-      //       payment_date: "13/09/2020",
-
-      //       amount: 24,
-      //     },
-      //     {
-      //       name: "Lollipop",
-      //       email: "example@yahoo.com",
-      //       user_status: "Inactive",
-      //       payment_status: "Overdue",
-      //       date: "12/10/2022",
-      //       payment_date: "13/09/2020",
-
-      //       amount: 24,
-      //     },
-      //     {
-      //       name: "Honeycomb",
-      //       email: "example@yahoo.com",
-      //       user_status: "active",
-      //       payment_status: "paid",
-      //       date: "12/10/2022",
-      //       payment_date: "13/09/2020",
-
-      //       amount: 24,
-      //     },
-      //     {
-      //       name: "Donut",
-      //       email: "example@yahoo.com",
-      //       user_status: "Inactive",
-      //       payment_status: "paid",
-      //       date: "12/10/2022",
-      //       payment_date: "13/09/2020",
-
-      //       amount: 24,
-      //     },
-      //     {
-      //       name: "KitKat",
-      //       email: "example@yahoo.com",
-      //       user_status: "active",
-      //       payment_status: "paid",
-      //       date: "12/10/2022",
-      //       payment_date: "13/09/2020",
-
-      //       amount: 24,
-      //     },
-      //   ],
+      totalAmount: null,
     };
   },
   methods: {
@@ -359,15 +249,21 @@ export default {
     axios
       .get("https://cornie-assessment.herokuapp.com/users/Q166X71vhbcrZ3C")
       .then((response) => (this.desserts = response.data.data));
+    setTimeout(() => {
+      const list = this.desserts;
+      const amounts = list.map((x) => x.amountInCents);
+      const total = amounts.reduce((acc, val) => {
+        return acc + val;
+      }, 0);
+      this.totalAmount = total;
+    }, 3000);
   },
+
   computed: {
     filterTable: function () {
       return this.desserts.filter((table) => {
         return table.firstName.match(this.search);
       });
-    },
-    totalAmount: function () {
-      return console.log(this.desserts.amountInCents);
     },
   },
 };
@@ -552,9 +448,10 @@ table.v-table thead th {
   color: #6e6893;
   white-space: nowrap;
 }
-.item-user-status {
-  position: relative;
-  top: 2px;
+
+.icon {
+  color: red !important;
+  font-size: 20px !important;
 }
 .item-user-status {
   font-style: normal;
@@ -563,7 +460,8 @@ table.v-table thead th {
   line-height: 15px;
   color: #4a4aff;
   position: relative;
-  top: 1px;
+
+  right: 18px;
 }
 
 .item-date {
@@ -583,7 +481,7 @@ table.v-table thead th {
   line-height: 15px;
   color: #4a4aff;
   position: relative;
-  right: 15px;
+  right: 25px;
 }
 .item-payment-date {
   font-style: normal;
