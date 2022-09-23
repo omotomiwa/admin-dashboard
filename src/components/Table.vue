@@ -13,14 +13,12 @@
             >
               <v-tabs-slider color="deep-purple"></v-tabs-slider>
 
-              <v-tab
-                v-for="item in items"
-                :key="item"
-                class="tabs"
-                v-on:click="testing(item.action)"
-              >
-                {{ item.title }}
+              <v-tab class="tabs" lower> All </v-tab>
+              <v-tab class="tabs" v-model="paidUser" @click="paidUsers()">
+                Paid
               </v-tab>
+              <v-tab class="tabs" @click="unPaidUsers()"> Unpaid </v-tab>
+              <v-tab class="tabs" @click="overdueUsers()"> Overdue </v-tab>
             </v-tabs>
             <div class="amount">
               <p class="total-amount x">Total payable amount:</p>
@@ -117,7 +115,7 @@
           <v-data-table
             v-model="selected"
             :headers="headers"
-            :items="filterTable"
+            :email-filter="filterEmail"
             :single-select="singleSelect"
             item-key="name"
             show-select
@@ -195,15 +193,11 @@ export default {
   data() {
     return {
       tab: null,
-      items: [
-        { title: "All", action: "clicked" },
-        { title: "Paid", action: "testing" },
-        { title: "Unpaid", action: "clicked" },
-        { title: "Overdue", action: "clicked" },
-      ],
+
       sorts: ["Default", "First Name", "Last Name", "Due Date", "Last Login"],
       users: ["All", "Active", "Inactive"],
       search: "",
+      paidUser: "paid",
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
       fav: true,
       menu: false,
@@ -252,21 +246,29 @@ export default {
       else if (paymentStatus == "unpaid") return "#965E00";
       else return "#D30000";
     },
-    paidUsers() {
-      return this.desserts.filter((table) => {
-        const paid = table.paymentStatus.match("paid");
-        return paid;
-      });
-    },
-    testing(x) {
-      switch (x) {
-        case "Paid":
-          alert("Paid");
-          break;
-        case "Unpaid":
-          alert("Unpaid");
-          break;
-      }
+    // paidUsers() {
+    //   return this.desserts.filter((table) => {
+    //     const paid = table.paymentStatus.match(/paid/g);
+    //     return paid;
+    //     //console.log(paid);
+    //   });
+    // },
+    // unPaidUsers() {
+    //   return this.desserts.filter((table) => {
+    //     const unPaid = table.paymentStatus.match(/unpaid/g);
+    //     //return unPaid;
+    //     console.log(unPaid);
+    //   });
+    // },
+    // overdueUsers() {
+    //   return this.desserts.filter((table) => {
+    //     const overdue = table.paymentStatus.match(/overdue/g);
+    //     //return overdue;
+    //     console.log(overdue);
+    //   });
+    // },
+    testing() {
+      alert("hello");
     },
   },
 
@@ -286,12 +288,20 @@ export default {
   },
 
   computed: {
-    filterTable: function () {
+    filterName: function () {
       return this.desserts.filter((table) => {
         const filterByName = table.firstName.match(this.search);
-        const filterByEmail = table.email.match(this.search);
-        const filterByDate = table.lastLogin.match(this.search);
-        return filterByName, filterByEmail, filterByDate;
+        //const filterByEmail = table.email.match(this.search);
+        //const filterByDate = table.lastLogin.match(this.search);
+        return filterByName;
+      });
+    },
+    filterEmail: function () {
+      return this.desserts.filter((table) => {
+        const filterByEmail = table.firstName.match(this.search);
+        //const filterByEmail = table.email.match(this.search);
+        //const filterByDate = table.lastLogin.match(this.search);
+        return filterByEmail;
       });
     },
   },
