@@ -116,6 +116,7 @@
             v-model="selected"
             :headers="headers"
             :items="filterName"
+            :email="filterEmail"
             :single-select="singleSelect"
             item-key="name"
             show-select
@@ -291,19 +292,19 @@ export default {
     filterName: function () {
       return this.desserts.filter((table) => {
         const filterByName = table.firstName.match(this.search);
-        //const filterByEmail = table.email.match(this.search);
+        const filterByEmail = table.email.match(this.search);
         //const filterByDate = table.lastLogin.match(this.search);
-        return filterByName;
+        return filterByName, filterByEmail;
       });
     },
-    // filterEmail: function () {
-    //   return this.desserts.filter((table) => {
-    //     const filterByEmail = table.firstName.match(this.search);
-    //     //const filterByEmail = table.email.match(this.search);
-    //     //const filterByDate = table.lastLogin.match(this.search);
-    //     return filterByEmail;
-    //   });
-    // },
+    filterEmail: function () {
+      return this.desserts.filter((table) => {
+        const filterByEmail = table.firstName.match(this.search);
+        //const filterByEmail = table.email.match(this.search);
+        //const filterByDate = table.lastLogin.match(this.search);
+        return filterByEmail;
+      });
+    },
   },
 };
 </script>
