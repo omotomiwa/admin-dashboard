@@ -115,7 +115,7 @@
           <v-data-table
             v-model="selected"
             :headers="headers"
-            :email-filter="filterEmail"
+            :items="filterName"
             :single-select="singleSelect"
             item-key="name"
             show-select
