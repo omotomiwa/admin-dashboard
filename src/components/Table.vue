@@ -296,14 +296,14 @@ export default {
         return filterByName;
       });
     },
-    filterEmail: function () {
-      return this.desserts.filter((table) => {
-        const filterByEmail = table.firstName.match(this.search);
-        //const filterByEmail = table.email.match(this.search);
-        //const filterByDate = table.lastLogin.match(this.search);
-        return filterByEmail;
-      });
-    },
+    // filterEmail: function () {
+    //   return this.desserts.filter((table) => {
+    //     const filterByEmail = table.firstName.match(this.search);
+    //     //const filterByEmail = table.email.match(this.search);
+    //     //const filterByDate = table.lastLogin.match(this.search);
+    //     return filterByEmail;
+    //   });
+    // },
   },
 };
 </script>
