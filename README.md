@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # admin-table
 
 ## Project setup
@@ -22,3 +23,6 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+=======
+# admin-dashboard
+>>>>>>> 536824b307eebfb30c9ed9d4dd46be9ba5c2e325
