@@ -13,8 +13,13 @@
             >
               <v-tabs-slider color="deep-purple"></v-tabs-slider>
 
-              <v-tab v-for="item in items" :key="item" class="tabs">
-                {{ item }}
+              <v-tab
+                v-for="item in items"
+                :key="item"
+                class="tabs"
+                v-on:click="testing(item.action)"
+              >
+                {{ item.title }}
               </v-tab>
             </v-tabs>
             <div class="amount">
@@ -112,7 +117,7 @@
           <v-data-table
             v-model="selected"
             :headers="headers"
-            :items="desserts"
+            :items="filterTable"
             :single-select="singleSelect"
             item-key="name"
             show-select
@@ -190,7 +195,12 @@ export default {
   data() {
     return {
       tab: null,
-      items: ["All", "Paid", "Unpaid", "Overdue"],
+      items: [
+        { title: "All", action: "clicked" },
+        { title: "Paid", action: "testing" },
+        { title: "Unpaid", action: "clicked" },
+        { title: "Overdue", action: "clicked" },
+      ],
       sorts: ["Default", "First Name", "Last Name", "Due Date", "Last Login"],
       users: ["All", "Active", "Inactive"],
       search: "",
@@ -242,6 +252,22 @@ export default {
       else if (paymentStatus == "unpaid") return "#965E00";
       else return "#D30000";
     },
+    paidUsers() {
+      return this.desserts.filter((table) => {
+        const paid = table.paymentStatus.match("paid");
+        return paid;
+      });
+    },
+    testing(x) {
+      switch (x) {
+        case "Paid":
+          alert("Paid");
+          break;
+        case "Unpaid":
+          alert("Unpaid");
+          break;
+      }
+    },
   },
 
   mounted: function () {
@@ -262,7 +288,10 @@ export default {
   computed: {
     filterTable: function () {
       return this.desserts.filter((table) => {
-        return table.firstName.match(this.search);
+        const filterByName = table.firstName.match(this.search);
+        const filterByEmail = table.email.match(this.search);
+        const filterByDate = table.lastLogin.match(this.search);
+        return filterByName, filterByEmail, filterByDate;
       });
     },
   },
