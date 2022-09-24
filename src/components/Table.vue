@@ -14,11 +14,15 @@
               <v-tabs-slider color="deep-purple"></v-tabs-slider>
 
               <v-tab class="tabs" lower> All </v-tab>
-              <v-tab class="tabs" v-model="paidUser" @click="paidUsers()">
+              <v-tab
+                class="tabs paid-tab"
+                v-model="paidUser"
+                @click="test(filterName)"
+              >
                 Paid
               </v-tab>
-              <v-tab class="tabs" @click="unPaidUsers()"> Unpaid </v-tab>
-              <v-tab class="tabs" @click="overdueUsers()"> Overdue </v-tab>
+              <v-tab class="tabs"> Unpaid </v-tab>
+              <v-tab class="tabs"> Overdue </v-tab>
             </v-tabs>
             <div class="amount">
               <p class="total-amount x">Total payable amount:</p>
@@ -116,14 +120,14 @@
             v-model="selected"
             :headers="headers"
             :items="filterName"
-            :custom-filter="filterName"
             :single-select="singleSelect"
-            item-key="name"
+            :item-key="usersData.id"
             show-select
             class="elevation-1"
             :single-expand="singleExpand"
             :expanded.sync="expanded"
             show-expand
+            :current-items="test"
           >
             <template v-slot:[`item.firstName`]="{ item }">
               <a small class="item-name"> {{ item.firstName }}</a
@@ -209,7 +213,7 @@ export default {
       singleSelect: false,
       selected: [],
       expanded: [],
-      singleExpand: false,
+      singleExpand: true,
       headers: [
         { text: "", value: "data-table-expand" },
         {
@@ -228,7 +232,7 @@ export default {
         { text: "", value: "icon" },
       ],
 
-      desserts: [],
+      usersData: [],
       totalAmount: null,
     };
   },
@@ -250,8 +254,9 @@ export default {
     // paidUsers() {
     //   return this.desserts.filter((table) => {
     //     const paid = table.paymentStatus.match(/paid/g);
-    //     return paid;
-    //     //console.log(paid);
+    //     if (paid) {
+    //       paid;
+    //     }
     //   });
     // },
     // unPaidUsers() {
@@ -268,8 +273,11 @@ export default {
     //     console.log(overdue);
     //   });
     // },
-    testing() {
-      alert("hello");
+
+    test() {
+      return this.usersData.filter((table) => {
+        return table.paymentStatus.match(/paid/g);
+      });
     },
   },
 
@@ -277,9 +285,9 @@ export default {
     const axios = require("axios");
     axios
       .get("https://cornie-assessment.herokuapp.com/users/Q166X71vhbcrZ3C")
-      .then((response) => (this.desserts = response.data.data));
+      .then((response) => (this.usersData = response.data.data));
     setTimeout(() => {
-      const list = this.desserts;
+      const list = this.usersData;
       const amounts = list.map((x) => x.amountInCents);
       const total = amounts.reduce((acc, val) => {
         return acc + val;
@@ -290,10 +298,10 @@ export default {
 
   computed: {
     filterName: function () {
-      return this.desserts.filter((table) => {
-        //const filterByName = table.firstName.match(this.search);
-        //const filterByEmail = table.email.match(this.search);
-        //const filterByDate = table.lastLogin.match(this.search);
+      return this.usersData.filter((table) => {
+        //let paid = document.getElementsByClassName("paid-tab");
+        // paid.addEventListener("click", alert("Hello"));
+
         if (table.firstName.match(this.search)) {
           return table.firstName.match(this.search);
         } else if (table.email.match(this.search)) {
