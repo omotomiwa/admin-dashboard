@@ -289,20 +289,20 @@ export default {
   },
 
   computed: {
+    // filterEmail: function () {
+    //   return this.desserts.filter((table) => {
+    //     // const filterByEmail = table.firstName.match(this.search);
+    //     // const filterByEmail = table.email.match(this.search);
+    //     const filterByDate = table.lastLogin.match(this.search);
+    //     return filterByDate;
+    //   });
+    // },
     filterName: function () {
       return this.desserts.filter((table) => {
         const filterByName = table.firstName.match(this.search);
-        const filterByEmail = table.email.match(this.search);
-        //const filterByDate = table.lastLogin.match(this.search);
-        return filterByName, filterByEmail;
-      });
-    },
-    filterEmail: function () {
-      return this.desserts.filter((table) => {
-        const filterByEmail = table.firstName.match(this.search);
         //const filterByEmail = table.email.match(this.search);
-        //const filterByDate = table.lastLogin.match(this.search);
-        return filterByEmail;
+        // const filterByDate = table.lastLogin.match(this.search);
+        return filterByName;
       });
     },
   },
