@@ -535,6 +535,7 @@ table.v-table thead th {
   font-size: 12px;
   line-height: 15px;
   color: #6e6893;
+  white-space: nowrap;
 }
 .item-amount {
   font-style: normal;
