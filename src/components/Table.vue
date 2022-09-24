@@ -116,7 +116,7 @@
             v-model="selected"
             :headers="headers"
             :items="filterName"
-            :email="filterEmail"
+            :custom-filter="filterName"
             :single-select="singleSelect"
             item-key="name"
             show-select
@@ -289,20 +289,18 @@ export default {
   },
 
   computed: {
-    // filterEmail: function () {
-    //   return this.desserts.filter((table) => {
-    //     // const filterByEmail = table.firstName.match(this.search);
-    //     // const filterByEmail = table.email.match(this.search);
-    //     const filterByDate = table.lastLogin.match(this.search);
-    //     return filterByDate;
-    //   });
-    // },
     filterName: function () {
       return this.desserts.filter((table) => {
-        const filterByName = table.firstName.match(this.search);
+        //const filterByName = table.firstName.match(this.search);
         //const filterByEmail = table.email.match(this.search);
-        // const filterByDate = table.lastLogin.match(this.search);
-        return filterByName;
+        //const filterByDate = table.lastLogin.match(this.search);
+        if (table.firstName.match(this.search)) {
+          return table.firstName.match(this.search);
+        } else if (table.email.match(this.search)) {
+          return table.email.match(this.search);
+        } else {
+          return table.lastLogin.match(this.search);
+        }
       });
     },
   },
