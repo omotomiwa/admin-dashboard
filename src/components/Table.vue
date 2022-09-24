@@ -14,11 +14,7 @@
               <v-tabs-slider color="deep-purple"></v-tabs-slider>
 
               <v-tab class="tabs" lower> All </v-tab>
-              <v-tab
-                class="tabs paid-tab"
-                v-model="paidUser"
-                @click="test(filterName)"
-              >
+              <v-tab class="tabs paid-tab" v-model="paidUser" @click="test()">
                 Paid
               </v-tab>
               <v-tab class="tabs"> Unpaid </v-tab>
@@ -127,7 +123,7 @@
             :single-expand="singleExpand"
             :expanded.sync="expanded"
             show-expand
-            :current-items="test"
+            :current-items="usersData"
           >
             <template v-slot:[`item.firstName`]="{ item }">
               <a small class="item-name"> {{ item.firstName }}</a
@@ -145,7 +141,7 @@
             </template>
 
             <template v-slot:[`item.userStatus`]="{ item }">
-              <v-icon class="item-user-status-icon icon"
+              <v-icon class="item-user-status-icon icon" style="color: red"
                 >mdi-circle-small</v-icon
               >
               <v-chip
@@ -159,7 +155,11 @@
               <p class="item-date">Last Login: {{ item.lastLogin }}</p>
             </template>
             <template v-slot:[`item.paymentStatus`]="{ item }">
-              <v-icon class="icon">mdi-circle-small</v-icon>
+              <v-icon
+                class="payment-status-icon"
+                :color="color(item.paymentStatus)"
+                >mdi-circle-small</v-icon
+              >
               <v-chip
                 small
                 class="ma-2 item-payment-status"
@@ -241,11 +241,7 @@ export default {
       if (userStatus == "active") return "#4A4AFF";
       else return "#6E6893";
     },
-    geticonColor(userStatus) {
-      var icon = document.getElementsByClassName("user-icon");
-      if (userStatus == "active") return (icon.style.color = "#4A4AFF");
-      else return (icon.style.color = "#6E6893");
-    },
+
     color(paymentStatus) {
       if (paymentStatus == "paid") return "#007F00";
       else if (paymentStatus == "unpaid") return "#965E00";
@@ -494,11 +490,11 @@ table.v-table thead th {
   color: #6e6893;
   white-space: nowrap;
 }
-
-.icon {
-  color: red !important;
-  font-size: 20px !important;
+.item-user-status-icon {
+  position: relative;
+  right: 5px;
 }
+
 .item-user-status {
   font-style: normal;
   font-weight: 500;
@@ -507,7 +503,7 @@ table.v-table thead th {
   color: #4a4aff;
   position: relative;
 
-  right: 18px;
+  right: 25px;
 }
 
 .item-date {
@@ -520,6 +516,10 @@ table.v-table thead th {
   top: 10px;
   white-space: nowrap;
 }
+.payment-status-icon {
+  position: relative;
+  right: 2px;
+}
 .item-payment-status {
   font-style: normal;
   font-weight: 500;
@@ -527,7 +527,7 @@ table.v-table thead th {
   line-height: 15px;
   color: #4a4aff;
   position: relative;
-  right: 25px;
+  right: 30px;
 }
 .item-payment-date {
   font-style: normal;
@@ -536,6 +536,8 @@ table.v-table thead th {
   line-height: 15px;
   color: #6e6893;
   white-space: nowrap;
+  position: relative;
+  top: 2px;
 }
 .item-amount {
   font-style: normal;
