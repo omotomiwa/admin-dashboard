@@ -289,7 +289,7 @@ export default {
         return acc + val;
       }, 0);
       this.totalAmount = total;
-    }, 3000);
+    }, 5000);
   },
 
   computed: {
